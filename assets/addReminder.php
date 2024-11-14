@@ -3,7 +3,8 @@ if (isset($_POST["msg"])) {
     session_start();
     include("config.php");
 
-    $msg = $_POST["msg"];
+    // Sanitize and escape the message input to prevent XSS
+    $msg = filter_var(trim($_POST["msg"]), FILTER_SANITIZE_STRING);
     $uid = $_SESSION['uid'];
 
     // Use prepared statement to prevent SQL injection
