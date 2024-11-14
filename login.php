@@ -1,10 +1,15 @@
 <?php
-error_reporting(0);
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 session_start();
+
 
 if (isset($_SESSION['uid'])) {
   $uid = $_SESSION['uid'];
+
   include('assets/config.php');
+  include('assets/monolog_config.php'); // Include monolog config file
+
 
   $query = "SELECT `role` FROM `users` WHERE `users`.`id`=?";
   $stmt = mysqli_prepare($conn, $query);
@@ -19,20 +24,35 @@ if (isset($_SESSION['uid'])) {
 
   if ($row && isset($row['role'])) {
     if ($row['role'] == "admin") {
+      $log->info('Admin logged in', ['uid' => $uid]);
+      $log->close();
       header('Location: admin_panel/dashboard.php');
       exit();
     } else if ($row['role'] == "owner") {
+      $log->info('Owner logged in', ['uid' => $uid]);
+      $log->close();
       header('Location: owner_panel/index.php');
       exit();
     } else if ($row['role'] == "teacher") {
+      $log->info('Teacher logged in', ['uid' => $uid]);
+      $log->close();
       header('Location: teacher_panel/dashboard.php');
       exit();
     } else if ($row['role'] == "student") {
+      $log->info('Student logged in', ['uid' => $uid]);
+      $log->close();
       header('Location: student_panel/index.php');
       exit();
+    } else {
+      $log->error('User not found');
+      
     }
+  } else {
+    $log->error('User not found');
   }
 }
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">

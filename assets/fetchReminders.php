@@ -39,4 +39,3 @@ if (isset($_SESSION['uid'])) {
 }
 
 echo json_encode($data);
-?>

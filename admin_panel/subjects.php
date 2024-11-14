@@ -142,7 +142,7 @@
 <!-- end of edit uploaded notes-->
 <!-- Sidebar -->
 <?php include('partials/_sidebar.php') ?>
-<input type="hidden" value="4" id="checkFileName">
+<input type="hidden" value="5" id="checkFileName">
 <!-- End of Sidebar -->
 
 

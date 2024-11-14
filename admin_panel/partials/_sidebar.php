@@ -1,21 +1,21 @@
-
 <div class="sidebar">
     <a href="dashboard.php" class="logo">
         <!-- <i class='bx bx-book-bookmark'></i> -->
         <img src="../images/1.png">
-          <div class="logo-name"><span class="text-warning">E</span><span class="darkTextColor">R</span><span class="text-warning">P</span></div>
+        <div class="logo-name"><span class="text-warning">E</span><span class="darkTextColor">R</span><span class="text-warning">P</span></div>
     </a>
-    
-      <ul class="side-menu-opener">
+
+    <ul class="side-menu-opener">
         <!-- <li>
             <div class='open-arrow SidebarOpener'><i class='bx bxs-chevron-right'></i></div>
         </li> -->
     </ul>
-    
+
     <ul class="side-menu main-side-board">
         <li><a href="dashboard.php"><i class='bx bxs-dashboard'></i>Dashboard</a></li>
         <li><a href="teacher.php"><i class='bx bxs-user-rectangle'></i>Teacher</a></li>
         <li><a href="student.php"><i class='bx bxs-user-detail'></i>Student</a></li>
+        <li><a href="logs.php"><i class='bx bx-history'></i>Logs</a></li>
         <li><a href="subjects.php"><i class='bx bx-book-bookmark'></i>Subjects</a></li>
         <li><a href="attendence.php"><i class='bx bx-list-check'></i>Attendence</a></li>
         <li><a href="noticeboard.php"><i class='bx bx-bookmark'></i>Notice Board</a></li>

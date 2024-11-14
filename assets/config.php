@@ -2,7 +2,7 @@
 $server = "localhost";
 
 $user = "root";
-$password = "root";
+$password = "";
 $db = "_sms";
 
 $conn = mysqli_connect($server, $user, $password, $db);

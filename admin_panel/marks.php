@@ -168,7 +168,7 @@
 
 <!-- Sidebar -->
 <?php include('partials/_sidebar.php') ?>
-<input type="hidden" value="10" id="checkFileName">
+<input type="hidden" value="11" id="checkFileName">
 <!-- End of Sidebar -->
 
 <!-- Main Content -->

@@ -19,7 +19,7 @@
 
                 <div class="container mr-3 ml-3">
                     <div class="alert alert-warning reminder-error" role="alert" style="min-height: 50px;display: none;">
-                    Message can't be empty!
+                        Message can't be empty!
                     </div>
                     <div class="mb-3">
                         <!-- <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label> -->
@@ -73,21 +73,21 @@
             <li onclick="showStudentList()">
                 <i class='bx bxs-group'></i>
                 <span class="info">
-                    <h3  class="text-center" id="studentCount">_ _ _</h3>
+                    <h3 class="text-center" id="studentCount">_ _ _</h3>
                     <p>Students</p>
                 </span>
             </li>
             <li onclick="showNotesList()">
                 <i class='bx bx-book'></i>
                 <span class="info">
-                    <h3 class="text-center"  id="classCount">_ _ _</h3>
+                    <h3 class="text-center" id="classCount">_ _ _</h3>
                     <p>Home work and Notes</p>
                 </span>
             </li>
             <li onclick="showNoticeList()">
                 <i class='bx bxs-bookmark'></i>
                 <span class="info">
-                    <h3 class="text-center"  id="noticeCount">_ _ _</h3>
+                    <h3 class="text-center" id="noticeCount">_ _ _</h3>
                     <p>Notices</p>
                 </span>
             </li>
@@ -100,10 +100,8 @@
                     <i class='bx bx-receipt'></i>
                     <h3 id="text-heading">Latest Notices</h3>
                     <i class='bx bx-filter'></i>
-                    <a href="noticeboard.php" > <i class='bx bx-plus icon-hover-circle' id="plusIconNotification" style="font-size: 30px;"></i></a>
+                    <a href="noticeboard.php"> <i class='bx bx-plus icon-hover-circle' id="plusIconNotification" style="font-size: 30px;"></i></a>
                 </div>
-
-
 
                 <table>
                     <thead>
@@ -114,7 +112,7 @@
                         </tr>
                     </thead>
                     <tbody id="noticeTableBody">
-                   
+
                     </tbody>
                 </table>
             </div>
@@ -123,21 +121,87 @@
             <div class="reminders">
                 <div class="header">
                     <i class='bx bx-note'></i>
-                    <h3>Remiders</h3>
+                    <h3>Reminders</h3>
                     <!-- <i class='bx bx-filter'></i> -->
                     <a data-bs-toggle="modal" data-bs-target="#reminder-modal"> <i style="font-size: 30px;" class='bx bx-plus icon-hover-circle'></i></a>
                 </div>
                 <ul class="task-list" id="all-reminders">
-                    
+
                 </ul>
             </div>
-           
-
-            <!-- End of Reminders-->
-
-            
         </div>
- <br>
+
+
+        <!-- End of Reminders-->
+
+        <!-- Table of Logs -->
+        <div class="logs" style="background-color: white; padding: 20px; border-radius: 10px;">
+            <div class="header">
+                <i class='bx bx-history'></i>
+                <h3>Logs</h3>
+                <i class='bx bx-filter'></i>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Level</th>
+                        <th>Message</th>
+                        <th>Time</th>
+                        <th>Context</th>
+                    </tr>
+                </thead>
+                <tbody id="logTableBody">
+                </tbody>
+            </table>
+        </div>
+        <style>
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            table,
+            th,
+            td {
+                border: 1px solid #ddd;
+            }
+
+            th,
+            td {
+                padding: 12px;
+                text-align: left;
+            }
+
+            th {
+                background-color: #f2f2f2;
+            }
+
+            tr:nth-child(even) {
+                background-color: #f9f9f9;
+            }
+
+            tr:hover {
+                background-color: #f1f1f1;
+            }
+
+            /* Add scrollbar for more than 10 items */
+            tbody {
+                display: block;
+                max-height: 300px;
+                overflow-y: auto;
+            }
+
+            thead,
+            tbody tr {
+                display: table;
+                width: 100%;
+                table-layout: fixed;
+            }
+        </style>
+
+
+
+        <br>
     </main>
 </div>
 

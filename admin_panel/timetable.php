@@ -39,7 +39,7 @@
     </div>
     <!-- Sidebar -->
     <?php include('partials/_sidebar.php') ?>
-    <input type="hidden" value="7" id="checkFileName">
+    <input type="hidden" value="8" id="checkFileName">
     <!-- End of Sidebar -->
 
     <!-- Main Content -->

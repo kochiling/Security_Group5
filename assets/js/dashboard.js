@@ -205,3 +205,47 @@ function changeReminderStatus(lineNumber) {
         });
 
 }
+
+// function to show logs
+function showLogs() {
+    var logTableBody = document.getElementById("logTableBody");
+    var logHTML = "";
+    if (logTableBody != null) {
+
+        fetch('../assets/fetchLogs.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success" && Array.isArray(data.logs)) {
+                let logHTML = ""; // Initialize the variable for storing HTML
+
+                data.logs.forEach(log => {
+                    logHTML += `
+                        <tr>
+                            <td>${log.level}</td>
+                            <td>${log.message}</td>
+                            <td>${log.time}</td>
+                            <td>${log.context}</td>
+                        </tr>`;
+                });
+
+                logTableBody.innerHTML = logHTML; // Add the generated HTML to the table body
+            } else {
+                console.error('No logs found or data format incorrect:', data);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+
+    }
+    
+}
+
+setInterval(showLogs, 1000);
+

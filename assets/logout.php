@@ -1,11 +1,17 @@
-<?php 
-    session_start();
+<?php
+include('config.php');
+require __DIR__ . "/../vendor/autoload.php";
+include('monolog_config.php');
+session_start();
 
-    unset($_SESSION);
-    session_destroy();
+$log->info('Admin logged out', ['uid' => $_SESSION['uid']]);
 
-    $response = array('status' => 'success',
-                     'message' => 'Logout successful');
-    echo json_encode($response);
+unset($_SESSION);
+session_destroy();
 
-?>
+
+$response = array(
+    'status' => 'success',
+    'message' => 'Logout successful'
+);
+echo json_encode($response);

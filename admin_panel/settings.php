@@ -232,7 +232,7 @@
 
     <!-- Sidebar -->
     <?php include('partials/_sidebar.php') ?>
-    <input type="hidden" value="12" id="checkFileName">
+    <input type="hidden" value="13" id="checkFileName">
     <!-- End of Sidebar -->
 
     <!-- Main Content -->
