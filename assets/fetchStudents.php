@@ -7,9 +7,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $postData = file_get_contents("php://input");
     $data = json_decode($postData, true);
 
-    $name = $data['name'];
-    $class = $data['as'];
-    $section = $data['a'];
+    $name = htmlspecialchars($data['name']);  
+    $class = htmlspecialchars($data['as']);   
+    $section = htmlspecialchars($data['a']);  
 
     $query = "";
     $resultOutput = array();
@@ -33,10 +33,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ORDER BY fname, lname ASC;";
 
             $stmt = mysqli_prepare($conn, $query);
-            $param1 = $array[0] . '%';
-            $param2 = '%' . $array[1] . "%";
-            $param3 = $array[1] . '%';
-            $param4 = '%' . $array[0] . "%";
+            $param1 = htmlspecialchars($array[0] . '%');
+            $param2 = htmlspecialchars('%' . $array[1] . "%");
+            $param3 = htmlspecialchars($array[1] . '%');
+            $param4 = htmlspecialchars('%' . $array[0] . "%");
             mysqli_stmt_bind_param($stmt, "ssssss", $class, $section, $param1, $param2, $param3, $param4);
         } else {
             $query = "SELECT *
@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ORDER BY fname, lname ASC;";
 
             $stmt = mysqli_prepare($conn, $query);
-            $param = '%' . $name . '%';
+            $param = htmlspecialchars('%' . $name . '%');
             mysqli_stmt_bind_param($stmt, "ssss", $class, $section, $param, $param);
         }
     }
@@ -58,10 +58,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (mysqli_num_rows($result) > 0) {
             $count = 1;
             while ($row = mysqli_fetch_assoc($result)) {
-                $fname = $row["fname"];
-                $lname = $row["lname"];
-                $tid = $row['id'];
-                $image = '../studentUploads/'.$row['image'];
+               $fname = htmlspecialchars($row["fname"]);
+                $lname = htmlspecialchars($row["lname"]);
+                $tid = htmlspecialchars($row['id']);
+                $image = '../studentUploads/' . htmlspecialchars($row['image']);
                 $image = file_exists($image) ? $image : "../images/user.png";
 
                 $resultOutput[$count - 1] = "<tr>
