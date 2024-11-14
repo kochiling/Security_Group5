@@ -1,6 +1,7 @@
 <?php
     session_start();
-    include("config.php");
+    include("../assets/config.php");
+    include("../assets/monolog_config.php");
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $response = "";
 
@@ -41,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             if(mysqli_stmt_execute($stmt)){
                 $response = "success";
+                $log->info('Note created', ['title' => $title, 'class' => $class, 'subject' => $subject, 'senderId' => $senderId]);
             }else{
                 $response = "Unable to create note!";
             }

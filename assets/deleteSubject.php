@@ -1,5 +1,7 @@
 <?php
-include('config.php');
+session_start();
+include("../assets/config.php");
+include("../assets/monolog_config.php");
 $response = "";
 
 if (isset($_POST['subjectId'])) {
@@ -12,8 +14,10 @@ if (isset($_POST['subjectId'])) {
 
     if (mysqli_stmt_execute($stmt)) {
         $response = "success";
+        $log->info('Subject deleted', ['subject_id' => $subID]);
     } else {
         $response = "Unable to delete subject";
+        $log->error('Unable to delete subject', ['subject_id' => $subID]);
     }
 
 } else {

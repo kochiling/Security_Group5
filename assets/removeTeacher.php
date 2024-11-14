@@ -1,6 +1,8 @@
 
 <?php
-include("config.php");
+session_start();
+include("../assets/config.php");
+include("../assets/monolog_config.php");
 
 if (isset($_POST['teacherid'])) {
     $teacherid = $_POST['teacherid'];
@@ -40,6 +42,8 @@ if (isset($_POST['teacherid'])) {
             }
             mysqli_stmt_close($stmt);
         }
+
+        $log->info('Teacher removed', ['teacherid' => $teacherid]);
 
         if (empty($response)) {
             // Delete the image file if it exists

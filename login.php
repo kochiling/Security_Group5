@@ -7,8 +7,8 @@ session_start();
 if (isset($_SESSION['uid'])) {
   $uid = $_SESSION['uid'];
 
-  include('assets/config.php');
-  include('assets/monolog_config.php'); // Include monolog config file
+  include('../Security_Group5/assets/config.php');
+  include('../Security_Group5/assets/monolog_config.php'); // Include monolog config file
 
 
   $query = "SELECT `role` FROM `users` WHERE `users`.`id`=?";
@@ -45,7 +45,6 @@ if (isset($_SESSION['uid'])) {
       exit();
     } else {
       $log->error('User not found');
-      
     }
   } else {
     $log->error('User not found');

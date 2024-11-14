@@ -1,6 +1,7 @@
 <?php
 session_start();
-include("config.php");
+include("../assets/config.php");
+include("../assets/monolog_config.php");
 
 $response = array();
 
@@ -43,6 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                     if (mysqli_stmt_execute($stmt)) {
                         $response["status"] = "updated";
                         $response["message"] = "Leave application updated successfully!";
+                        $log-> info('Leave updated', ['leaveType' => $leaveType, 'leaveDesc' => $leaveDesc, 'startDate' => $startDateStr, 'endDate' => $endDateStr, 's_no' => $s_no, 'sender_id' => $user_id]);
                     } else {
                         $response['status'] = "ERROR";
                         $response['message'] = "Unable to update leave!";

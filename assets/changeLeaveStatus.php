@@ -1,6 +1,8 @@
 <?php
 
-include("config.php");
+session_start();
+include("../assets/config.php");
+include("../assets/monolog_config.php");
 $response = array();
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -19,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             if (mysqli_affected_rows($conn) > 0) {
                 $response['status'] = "success";
                 $response['message'] = ucfirst(strtolower($status)) . " successfully!";
+                $log->info('Leave status changed', ['s_no' => $s_no, 'status' => $status]);
             } else {
                 $response['status'] = "ERROR";
                 $response['message'] = "Something went wrong!";

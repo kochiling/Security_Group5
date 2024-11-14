@@ -1,5 +1,7 @@
 <?php
-include("config.php");
+session_start();
+include("../assets/config.php");
+include("../assets/monolog_config.php");
 
 $response = array();
 
@@ -34,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             if (mysqli_stmt_execute($stmt)) {
                 $response['status'] = 'success';
                 $response['examId'] = $examId;
+                $log -> info('Exam title created', ['title' => $title, 'subject' => $subject, 'class' => $class, 'section' => $section, 'total' => $total, 'passing' => $passing]);
             } else {
                 $response['status'] = 'error';
                 $response['message'] = 'Unable to create exam title.';

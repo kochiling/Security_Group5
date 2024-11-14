@@ -1,6 +1,8 @@
 <?php 
 
-include("config.php");
+session_start();
+include("../assets/config.php");
+include("../assets/monolog_config.php");
 $response = ""; 
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -15,8 +17,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
     if (mysqli_affected_rows($conn) > 0) {
         $response = "success";
+        $log->info('Subject edited', ['subject_id' => $subjectId]);
     } else {
         $response = "Unable to edit subject!";
+        $log->error('Unable to edit subject', ['subject_id' => $subjectId]);
     }
 
     mysqli_stmt_close($stmt);

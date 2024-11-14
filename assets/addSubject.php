@@ -1,6 +1,7 @@
 <?php
-include("config.php");
-
+session_start();
+include("../assets/config.php");
+include("../assets/monolog_config.php");
 $response = "";
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -32,6 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
             if (mysqli_stmt_affected_rows($stmt) > 0) {
                 $response = "success";
+                $log->info('New subject added', ['subject' => $subject, 'class' => $class]);
             } else {
                 $response = "Unable to add a new subject!";
             }

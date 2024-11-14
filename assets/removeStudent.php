@@ -1,5 +1,7 @@
 <?php
-include("config.php");
+session_start();
+include("../assets/config.php");
+include("../assets/monolog_config.php");    
 $response = '';
 
 if (isset($_POST['studentid'])) {
@@ -37,6 +39,8 @@ if (isset($_POST['studentid'])) {
             }
             mysqli_stmt_close($stmt);
         }
+
+        $log->info('Student removed', ['studentid' => $studentid]);
 
         if (empty($response)) {
             if ($row['image'] != '1701517055user.png' && file_exists($pathToFile)) {

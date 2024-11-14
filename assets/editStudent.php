@@ -1,6 +1,8 @@
 <?php
 
-include("config.php");
+session_start();
+include("../assets/config.php");
+include("../assets/monolog_config.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -58,8 +60,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         if (mysqli_stmt_execute($stmt) && mysqli_stmt_execute($stmt2) && mysqli_stmt_execute($stmt3)) {
             echo 'success';
+            $log->info('Student updated', ['id' => $id]);
         } else {
             echo "something went wrong! database";
+            $log->error('Something went wrong while updating student', ['id' => $id]);
         }
         
         mysqli_stmt_close($stmt);

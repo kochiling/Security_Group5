@@ -1,6 +1,8 @@
 <?php
-include("config.php");
+
 session_start();
+include('../assets/config.php');
+include('../assets/monolog_config.php');
 $response = array();
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -31,6 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         if(mysqli_stmt_execute($stmt) && mysqli_stmt_execute($stmt2)){
             $response['status'] = "success";
             $response['message'] = "Profile Edited Successfully.";
+            $log -> info('Profile edited successfully', ['uid' => $uid]);
         }else{
             $response['status'] = "Error";
             $response['message'] = "Something went wrong!";

@@ -1,6 +1,7 @@
 <?php
 session_start();
-include('config.php');
+include("../assets/config.php");
+include("../assets/monolog_config.php");
 $response = array();
 
 if (isset($_SESSION['uid']) && $_SERVER["REQUEST_METHOD"] == "POST") {
@@ -26,9 +27,11 @@ if (isset($_SESSION['uid']) && $_SERVER["REQUEST_METHOD"] == "POST") {
     ) { 
         $response['status'] = "success";
         $response['message'] = 'Bus removed successfully!';
+        $log->info('Bus removed', ['bus_id' => $busId]);
     }else{
         $response['status'] = "ERROR";
         $response['message'] = 'Something went wrong while deleting bus!';
+        $log->error('Something went wrong while deleting bus', ['bus_id' => $busId]);
     }
 } else {
     $response['status'] = 'ERROR';

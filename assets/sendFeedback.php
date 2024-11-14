@@ -1,6 +1,7 @@
 <?php
 session_start();
-include("config.php");
+include("../assets/config.php");
+include("../assets/monolog_config.php");
 $response = array();
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
@@ -21,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         if (mysqli_stmt_execute($stmt)) {
             $response['status'] = 'success';
             $response['msg'] = 'successfully sent!'; 
+            $log->info('Feedback sent', ['senderId' => $senderId, 'receiverId' => $receiverId]);
         } else {
             $response['status'] = 'error';
             $response['msg'] = 'unable to send feedback!';

@@ -1,7 +1,8 @@
 <?php
-include("config.php");
 $response = "";
 session_start();
+include("../assets/config.php");
+include("../assets/monolog_config.php");
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $senderId = $_SESSION['uid'];
 
@@ -39,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                         if (mysqli_stmt_execute($stmt)) {
                             $response = "success";
+                            $log -> info('Syllabus updated', ['s_no' => $sllyabusId]);
                         } else {
                             $response = "Unable to upload sllyabus!";
                         }
@@ -46,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     } else {
                         $response = "Error while uploading file!";
+                        
                     }
 
                 } else {

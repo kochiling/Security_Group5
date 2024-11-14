@@ -1,5 +1,7 @@
 <?php
-include("config.php");
+session_start();
+include("../assets/config.php");
+include("../assets/monolog_config.php");
 $response = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -100,6 +102,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if (mysqli_stmt_affected_rows($stmt) > 0) {
                 $response = 'success';
+                $log->info('Student added succesfully', ['fname' => $fname, 'lname' => $lname, 'email' => $email]);
 
                 if (!$uploadDone) {
                     $response = "Image upload failed! (Student successfully added)";

@@ -1,5 +1,9 @@
-
-<?php include("../assets/noSessionRedirect.php"); ?>
+<?php
+session_start();
+include("../assets/noSessionRedirect.php");
+include('../assets/config.php');
+include('../assets/monolog_config.php'); // Include monolog config file
+?>
 <?php include("./verifyRoleRedirect.php"); ?>
 
 <!DOCTYPE html>
@@ -11,14 +15,14 @@
 
     <link rel="icon" type="image/x-icon" href="../images/1.png">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    
+
 
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="style.css">
     <title>School Management</title>
     <link rel="icon" type="image/x-icon" href="images/1.png">
 
-   
+
 
 
 </head>

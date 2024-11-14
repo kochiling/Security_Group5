@@ -1,6 +1,8 @@
 <?php
-include("config.php");
+
 session_start();
+include("../assets/config.php");
+include("../assets/monolog_config.php");
 $response = array();
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -44,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 if (mysqli_stmt_execute($stmt2)) {
                     $response['status'] = "success";
                     $response["message"] = "Password changed successfully.";
+                    $log->info('User password changed', ['uid' => $uid]);
 
                 } else {
                     $response['status'] = "Error";

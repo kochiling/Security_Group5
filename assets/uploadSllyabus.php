@@ -1,7 +1,8 @@
 <?php
-
-include("config.php");
 session_start();
+include("../assets/config.php");
+include("../assets/monolog_config.php");
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $response = "";
     $senderId = $_SESSION['uid'];
@@ -31,38 +32,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if (unlink($existingFile)) {
                     $filename = $_FILES["file"]["name"];
                     $tempname = $_FILES["file"]["tmp_name"];
-        
+
                     $fileInfo = pathinfo($filename);
                     $fileExtension = strtolower($fileInfo['extension']);
-        
+
                     $newName = $senderId . time() . "." . $fileExtension;
-        
+
                     $folder = __DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "syllabusUploads" . DIRECTORY_SEPARATOR . $newName;
-        
+
                     if (move_uploaded_file($tempname, $folder)) {
                         $query = "UPDATE `syllabus` SET `file` = ? WHERE `class` = ? AND `subject` = ?;";
-        
+
                         $stmt = mysqli_prepare($conn, $query);
-                        mysqli_stmt_bind_param($stmt, "sss",$newName, $class, $subject);
-        
+                        mysqli_stmt_bind_param($stmt, "sss", $newName, $class, $subject);
+
                         if (mysqli_stmt_execute($stmt)) {
                             $response = "success";
+                            $log->info('Syllabus updated', ['class' => $class, 'subject' => $subject, 'senderId' => $senderId]);
                         } else {
                             $response = "Unable to upload sllyabus!";
                         }
                         mysqli_stmt_close($stmt);
-        
                     } else {
                         $response = "Error while uploading file!";
                     }
-
                 } else {
                     $response = "Something went wrong!";
                 }
             } else {
                 $response = "Something went wrong!";
             }
-
         } else {
             $filename = $_FILES["file"]["name"];
             $tempname = $_FILES["file"]["tmp_name"];
@@ -86,19 +85,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $response = "Unable to upload sllyabus!";
                 }
                 mysqli_stmt_close($stmt);
-
             } else {
                 $response = "Error while uploading file!";
             }
         }
-
-
-
     } else {
         $response = "Something went Wrong!";
     }
-
-
 } else {
     $response = "Something went wrong!";
 }
@@ -106,4 +99,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 echo $response;
 
 mysqli_close($conn);
-?>

@@ -1,5 +1,7 @@
 <?php
-include('config.php');
+session_start();
+include('../assets/config.php');
+include('../assets/monolog_config.php');
 $response = "";
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
@@ -20,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
         if(mysqli_stmt_execute($stmt)){
             $response = "success";
+            $log->info('Attendence uploaded for student ID', ['studentId' => $key, 'attendence' => $attendence, 'class' => $class, 'section' => $section]);
         }else{
             $response = "Something went wrong while saving!!";
         }

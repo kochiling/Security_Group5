@@ -1,6 +1,7 @@
 <?php
-include('config.php');
 session_start();
+include("../assets/config.php");
+include("../assets/monolog_config.php");
 
 
 
@@ -21,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (isset($_FILES["file"]) && $_FILES["file"]["error"] == 0) {
 
-    
+
         $fileSize = $_FILES['file']['size'];
 
         if ($fileSize > $allowedFileSize) {
@@ -43,33 +44,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $file = "";
             }
         }
-
     } else {
         $fileSize = 0;
     }
 
     if ($fileSize > $allowedFileSize) {
-
     } else {
-       
+
         // Use prepared statement to insert notice
         $query = "INSERT INTO `notice` (`s_no`, `sender_id`, `editor_id`, `title`, `body`,  `importance`,`file`, `timestamp`) VALUES (NULL, ?, ?, ?, ?, ?, ?, current_timestamp())";
         $stmt = mysqli_prepare($conn, $query);
         mysqli_stmt_bind_param($stmt, "ssssss", $senderId, $senderId, $title, $body, $importance, $file);
 
-     
+
 
         if (mysqli_stmt_execute($stmt)) {
             $response = "success";
+            $log->info('Notice created', ['sender_id' => $senderId]);
         } else {
             $response = "Unable to create notice!";
+            $log->error('Unable to create notice', ['sender_id' => $senderId]);
         }
         mysqli_stmt_close($stmt);
     }
-
 } else {
     $response = "Invalid request!";
 }
 
 echo $response;
-?>

@@ -1,5 +1,7 @@
 <?php
-include('config.php');
+session_start();
+include("../assets/config.php");
+include("../assets/monolog_config.php");
 $response = "";
 
 if (isset($_POST['noticeId'])) {
@@ -25,8 +27,10 @@ if (isset($_POST['noticeId'])) {
                 mysqli_stmt_bind_param($stmt, "i", $noticeId);
                 if (mysqli_stmt_execute($stmt)) {
                     $response = "success";
+                    $log->info('Notice deleted', ['s_no' => $noticeId]);
                 } else {
                     $response = "Something went wrong while deleting!";
+                    $log->error('Something went wrong while deleting notice', ['s_no' => $noticeId]);
                 }
                 mysqli_stmt_close($stmt);
             } else {
@@ -43,8 +47,10 @@ if (isset($_POST['noticeId'])) {
                         mysqli_stmt_bind_param($stmt, "i", $noticeId);
                         if (mysqli_stmt_execute($stmt)) {
                             $response = "success";
+                            $log->info('Notice deleted', ['s_no' => $noticeId]);
                         } else {
                             $response = "Something went wrong while deleting!";
+                            $log->error('Something went wrong while deleting notice', ['s_no' => $noticeId]);
                         }
                         mysqli_stmt_close($stmt);
                     } else {

@@ -1,5 +1,7 @@
 <?php
-include("config.php");
+session_start();
+include("../assets/config.php");
+include("../assets/monolog_config.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
    
@@ -66,6 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         mysqli_stmt_execute($stmt);
 
         echo 'success';
+        $log->info('New teacher added', ['email' => $email]);
     }
 
 } else {

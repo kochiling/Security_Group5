@@ -1,7 +1,8 @@
 <?php
 
-include("config.php");
 session_start();
+include("../assets/config.php");
+include("../assets/monolog_config.php");
 $response = "";
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -66,6 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             if (mysqli_stmt_execute($stmt2)) {
                 $response = "success";
+                $log->info('Note updated', ['s_no' => $noteId]);
 
             } else {
                 $response =  'Something went wrong!';
@@ -88,9 +90,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if (mysqli_stmt_execute($stmt3)) {
             $response = "success";
+            $log->info('Note updated', ['s_no' => $noteId]);
 
         } else {
             $response =  'Something went wrong!';
+            
         }
         mysqli_stmt_close($stmt3);
     }

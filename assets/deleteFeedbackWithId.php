@@ -1,5 +1,7 @@
 <?php
-include("config.php");
+session_start();
+include("../assets/config.php");
+include("../assets/monolog_config.php");
 $response = array();
 
 if (isset($_POST["feedbackid"])) {
@@ -11,9 +13,11 @@ if (isset($_POST["feedbackid"])) {
     if(mysqli_stmt_execute($stmt)){
         $response['status'] = "success";
         $response['message'] = "Feedback deleted successfully!";
+        $log->info('Feedback deleted', ['s_no' => $feedbackid]);
     }else{
         $response['status'] = "error";
         $response['message'] = "Unable to delete feedback!";
+        $log->error('Unable to delete feedback', ['s_no' => $feedbackid]);
     }
 } else {
     $response['status'] = "success";

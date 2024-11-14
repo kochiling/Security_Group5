@@ -1,7 +1,8 @@
 <?php
-
-include("config.php");
 session_start();
+include("../assets/config.php");
+include("../assets/monolog_config.php");
+
 $response = array();
 $arrayOfDays = array('mon', 'tue', 'wed', 'thu', 'fri', 'sat');
 
@@ -10,7 +11,7 @@ $dataArray = json_decode($jsonData, true);
 $class = $dataArray['class'];
 $section = $dataArray['section'];
 $dayOfWeek = (int)$dataArray['dayOfWeak'];
-$uid = $_SESSION['uid']; 
+$uid = $_SESSION['uid'];
 
 if ($dataArray !== null) {
     $receivedData = $dataArray['data'];
@@ -30,12 +31,13 @@ if ($dataArray !== null) {
         $response['status'] = '';
         while ($row = mysqli_fetch_assoc($result)) {
             if ($dayOfWeek < 7) {
-                $sql = 'UPDATE `time_table` SET `start_time` = ?, `end_time` = ?, '.$arrayOfDays[$dayOfWeek - 1].' = ?, `editor_id` = ?, `timestamp` = CURRENT_TIMESTAMP() WHERE `time_table`.`s_no` = ?;';
+                $sql = 'UPDATE `time_table` SET `start_time` = ?, `end_time` = ?, ' . $arrayOfDays[$dayOfWeek - 1] . ' = ?, `editor_id` = ?, `timestamp` = CURRENT_TIMESTAMP() WHERE `time_table`.`s_no` = ?;';
                 $stmt2 = mysqli_prepare($conn, $sql);
                 mysqli_stmt_bind_param($stmt2, "ssssi", $receivedData[$count]['startTime'], $receivedData[$count]['endTime'], $receivedData[$count]['subject'], $uid, $row['s_no']);
-                
+
                 if (mysqli_stmt_execute($stmt2)) {
-                    $response['status'] = 'success : ' ;
+                    $response['status'] = 'success : ';
+                    $log->info('Time table updated', ['teacher_id' => $uid, 'class' => $class, 'section' => $section, 'day' => $dayOfWeek]);
                 } else {
                     $response['status'] = 'error';
                     break;
@@ -58,5 +60,3 @@ if ($dataArray !== null) {
 }
 
 echo json_encode($response);
-
-?>

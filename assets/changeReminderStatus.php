@@ -1,7 +1,7 @@
 <?php
 session_start();
-
-include('config.php');
+include("../assets/config.php");
+include("../assets/monolog_config.php");
 
 if (isset($_POST['dbLine'])) {
     $line = (int)$_POST['dbLine'];

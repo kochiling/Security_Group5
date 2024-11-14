@@ -1,6 +1,7 @@
 <?php
 session_start();
-include("config.php");
+include("../assets/config.php");
+include("../assets/monolog_config.php");
 
 $response = array();
 
@@ -29,9 +30,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 if (mysqli_stmt_execute($stmt)) {
                     $response['status'] = "success";
                     $response['message'] = "Leave Deleted successfully!";
+                    $log->info('Leave deleted', ['s_no' => $s_no]);
                 } else {
                     $response['status'] = "ERROR";
                     $response['message'] = "Unable to delete leave!";
+                    $log->error('Unable to delete leave', ['s_no' => $s_no]);
                 }
 
                 mysqli_stmt_close($stmt);
