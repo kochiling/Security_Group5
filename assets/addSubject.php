@@ -9,8 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $data = json_decode($json_data, true);
 
     if (isset($data["subject"]) && isset($data["class"])) {
-        $class = $data["class"];
-        $subject = $data["subject"];
+        $class = mysqli_real_escape_string($conn, $data["class"]);
+        $subject = mysqli_real_escape_string($conn, $data["subject"]);
 
         $subjectId = $class . uniqid();
 
