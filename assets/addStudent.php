@@ -4,35 +4,39 @@ $response = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
+    // Sanitize and escape user input
     $uniqueId = "S" . time();
 
-    $fname = $_POST["fname"];
-    $lname = $_POST["lname"];
-    $father = $_POST["father"];
+    // Sanitize each POST field
+    $fname = mysqli_real_escape_string($conn, htmlspecialchars(strip_tags(trim($_POST["fname"]))));
+    $lname = mysqli_real_escape_string($conn, htmlspecialchars(strip_tags(trim($_POST["lname"]))));
+    $father = mysqli_real_escape_string($conn, htmlspecialchars(strip_tags(trim($_POST["father"]))));
 
+    // Sanitize and validate the date of birth
     $dobString = $_POST["dob"];
     $timestamp = strtotime($dobString);
     $dob = date('d-m-Y', $timestamp);
 
-    $gender = $_POST["gender"];
-    $class = $_POST["class"];
-    $section = $_POST["section"];
+    // Sanitize other fields
+    $gender = mysqli_real_escape_string($conn, htmlspecialchars(strip_tags(trim($_POST["gender"]))));
+    $class = mysqli_real_escape_string($conn, htmlspecialchars(strip_tags(trim($_POST["class"]))));
+    $section = mysqli_real_escape_string($conn, htmlspecialchars(strip_tags(trim($_POST["section"]))));
     $imageName = "1701517055user.png";
     $allowedExtensions = ['png', 'jpeg', 'jpg'];
 
-    $phone = $_POST["phone"];
-    $email = $_POST["email"];
-    $address = $_POST["address"];
-    $city = $_POST["city"];
-    $zip = $_POST["zip"];
-    $state = $_POST["state"];
-    $guardian = $_POST["guardian"];
-    $gphone = $_POST["gphone"];
-    $gaddress = $_POST["gaddress"];
-    $gcity = $_POST["gcity"];
-    $gzip = $_POST["gzip"];
-    $relation = $_POST["relation"];
-
+    // Sanitize phone, email, address
+    $phone = mysqli_real_escape_string($conn, filter_var(strip_tags(trim($_POST["phone"])), FILTER_SANITIZE_NUMBER_INT));
+    $email = mysqli_real_escape_string($conn, filter_var(trim($_POST["email"]), FILTER_SANITIZE_EMAIL));
+    $address = mysqli_real_escape_string($conn, htmlspecialchars(strip_tags(trim($_POST["address"]))));
+    $city = mysqli_real_escape_string($conn, htmlspecialchars(strip_tags(trim($_POST["city"]))));
+    $zip = mysqli_real_escape_string($conn, htmlspecialchars(strip_tags(trim($_POST["zip"]))));
+    $state = mysqli_real_escape_string($conn, htmlspecialchars(strip_tags(trim($_POST["state"]))));
+    $guardian = mysqli_real_escape_string($conn, htmlspecialchars(strip_tags(trim($_POST["guardian"]))));
+    $gphone = mysqli_real_escape_string($conn, filter_var(strip_tags(trim($_POST["gphone"])), FILTER_SANITIZE_NUMBER_INT));
+    $gaddress = mysqli_real_escape_string($conn, htmlspecialchars(strip_tags(trim($_POST["gaddress"]))));
+    $gcity = mysqli_real_escape_string($conn, htmlspecialchars(strip_tags(trim($_POST["gcity"]))));
+    $gzip = mysqli_real_escape_string($conn, htmlspecialchars(strip_tags(trim($_POST["gzip"]))));
+    $relation = mysqli_real_escape_string($conn, htmlspecialchars(strip_tags(trim($_POST["relation"]))));
     $uploadDone = true;
     $invalidFormat = false;
 
