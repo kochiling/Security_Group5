@@ -8,29 +8,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $uniqueId = "T" . time(); 
 
-    $fname = $dataObject["fname"];
-    $lname = $dataObject["lname"];
-    $_class = $dataObject["class"];
-    $_section = $dataObject["section"];
-    $subject = $dataObject["subject"];
-    $gender = $dataObject["gender"];
+    // Sanitize and validate input data
+    $fname = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["fname"])); 
+    $lname = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["lname"])); 
+    $_class = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["class"])); 
+    $_section = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["section"])); 
+    $subject = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["subject"])); 
+    $gender = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["gender"])); 
 
-    $dobString = $dataObject["dob"];
+    $dobString = htmlspecialchars($dataObject["dob"]); 
     $timestamp = strtotime($dobString);
     $dob = date('d-m-Y', $timestamp);
 
-    $phone = $dataObject["phone"];
-    $email = $dataObject["email"];
-    $address = $dataObject["address"];
-    $city = $dataObject["city"];
-    $zip = $dataObject["zip"];
-    $state = $dataObject["state"];
-    $guardian = $dataObject["guardian"];
-    $gphone = $dataObject["gphone"];
-    $gaddress = $dataObject["gaddress"];
-    $gcity = $dataObject["gcity"];
-    $gzip = $dataObject["gzip"];
-    $relation = $dataObject["relation"];
+    $phone = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["phone"]), FILTER_SANITIZE_NUMBER_INT); 
+    $email = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["email"]), FILTER_SANITIZE_EMAIL); 
+    $address = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["address"])); 
+    $city = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["city"])); 
+    $zip = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["zip"])); 
+    $state = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["state"])); 
+    $guardian = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["guardian"])); 
+    $gphone = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["gphone"])); 
+    $gaddress = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["gaddress"])); 
+    $gcity = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["gcity"])); 
+    $gzip = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["gzip"])); 
+    $relation = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["relation"])); 
+
 
     // Use prepared statement to check if the email already exists
     $sql = "SELECT * FROM users WHERE email=?";
