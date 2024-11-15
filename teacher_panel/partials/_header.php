@@ -1,3 +1,7 @@
+<?php
+header("Access-Control-Allow-Origin: *");
+header("Content-Security-Policy: default-src 'self'; script-src 'self' https://kit.fontawesome.com; style-src 'self' 'unsafe-inline' https://unpkg.com https://cdnjs.cloudflare.com https://fonts.googleapis.com;  font-src 'self' https://fonts.gstatic.com https://kit.fontawesome.com https://unpkg.com; img-src 'self' data:;  object-src 'none'");
+?>
 
 <?php include("../assets/noSessionRedirect.php"); ?>
 <?php include("./verifyRoleRedirect.php"); ?>
