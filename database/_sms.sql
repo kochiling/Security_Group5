@@ -596,7 +596,7 @@ CREATE TABLE `users` (
   `password_hash` varchar(700) NOT NULL,
   `role` varchar(20) NOT NULL,
   `theme` varchar(20) NOT NULL DEFAULT 'light',
-  `data_policy` int(1) NOT NULL DEFAULT '0'
+  `data_policy` int(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
