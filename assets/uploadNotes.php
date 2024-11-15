@@ -6,10 +6,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $response = "";
 
     // Sanitize input fields
-    $comment = htmlspecialchars(mysqli_real_escape_string($conn, filter_var($_POST["comment"], FILTER_SANITIZE_STRING)));
-    $class = htmlspecialchars(mysqli_real_escape_string($conn, filter_var($_POST["class"], FILTER_SANITIZE_STRING)));
-    $subject = htmlspecialchars(mysqli_real_escape_string($conn, filter_var($_POST["subject"], FILTER_SANITIZE_STRING)));
-    $title = htmlspecialchars(mysqli_real_escape_string($conn, filter_var($_POST["title"], FILTER_SANITIZE_STRING)));
+    $comment = htmlspecialchars(mysqli_real_escape_string($conn, filter_var($_POST["comment"], FILTER_SANITIZE_FULL_SPECIAL_CHARS)));
+    $class = htmlspecialchars(mysqli_real_escape_string($conn, filter_var($_POST["class"], FILTER_SANITIZE_FULL_SPECIAL_CHARS)));
+    $subject = htmlspecialchars(mysqli_real_escape_string($conn, filter_var($_POST["subject"], FILTER_SANITIZE_FULL_SPECIAL_CHARS)));
+    $title = htmlspecialchars(mysqli_real_escape_string($conn, filter_var($_POST["title"], FILTER_SANITIZE_FULL_SPECIAL_CHARS)));
     $senderId = $_SESSION['uid'];
 
     // Check if file is uploaded and there are no errors
