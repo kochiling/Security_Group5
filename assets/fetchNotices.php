@@ -1,5 +1,7 @@
 <?php
-include('config.php');
+session_start();
+include('../assets/config.php');
+include('../assets/monolog_config.php');
 $response = array();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -106,6 +108,7 @@ if (isset($_POST['begin'])) {
         } else {
             $response[0] = "No_Data";
         }
+
 
         mysqli_stmt_close($stmt);
     } else {

@@ -2,6 +2,10 @@
 include("../assets/noSessionRedirect.php"); 
 include('./fetch-data/verfyRoleRedirect.php');
 
+session_start();
+include('../assets/config.php');
+include('../assets/monolog_config.php');
+
 error_reporting(0);
 ?>
   <!DOCTYPE html>
@@ -254,6 +258,7 @@ if ($result->num_rows > 0) {
             $file_path = '../noticeUploads/' . $row['file'];
             if (file_exists($file_path)) {
                 echo "<a href='$file_path' download class='btn btn-primary'>Download</a>";
+                $log->info('File downloaded by user', ['file' => $row['file'], 'uid' => $_SESSION['uid']]);
             } else {
                 echo "<span class='text-danger'>File not found</span>";
             }
@@ -280,6 +285,7 @@ document.addEventListener('DOMContentLoaded', function() {
             var result = window.confirm("Are you sure you want to delete this notice?");
             if (result) {
                 var noticeId = button.getAttribute('data-id');
+                
                 fetch('fetch-data/notice-delete.php', {
                     method: 'POST',
                     headers: {
@@ -287,6 +293,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     },
                     body: 'noticeId=' + encodeURIComponent(noticeId)
                 })
+
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');

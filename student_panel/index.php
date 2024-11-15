@@ -1,4 +1,9 @@
-<?php include("../assets/noSessionRedirect.php"); ?>
+<?php include("../assets/noSessionRedirect.php");
+
+session_start();
+include('../assets/config.php');
+include('../assets/monolog_config.php');
+?>
 
 <?php include("./verifyRoleRedirect.php"); ?>
 
@@ -35,12 +40,14 @@
                 height: 200px;
                 padding-left: 0%;
                 padding-right: 0%;
-                
+
             }
-            .container main .subjects{
+
+            .container main .subjects {
                 margin-left: 4%;
             }
-            .leaves{
+
+            .leaves {
                 width: 106%;
                 /*margin-left: 5%;*/
                 font-size: 10px;
@@ -131,7 +138,7 @@
             <h2>E<span class="danger">R</span>P</h2>
         </div>
         <div class="navbar">
-        <a href="index.php">
+            <a href="index.php">
                 <span class="material-icons-sharp">home</span>
                 <h3>Home</h3>
             </a>
@@ -222,7 +229,7 @@
 
                     ?><br>
                     <b><a href="buspanel.php">Bus Panel</a></b><br><br>
-                     <br>
+                    <br>
                     <b><a href="fee-payment.php">Pay-Fee</a></b>
                 </div>
             </div>
@@ -292,24 +299,25 @@
                 <div class="updates">
                     <div class="message">
                         <?php
-$id = $_SESSION['uid'];
-$query_sql2 = "SELECT * FROM students WHERE id='$id'";
-$result = mysqli_query($conn, $query_sql2);
-$row = $result->fetch_assoc();
-$class = $row['class'];
+                        $id = $_SESSION['uid'];
+                        $query_sql2 = "SELECT * FROM students WHERE id='$id'";
+                        $result = mysqli_query($conn, $query_sql2);
+                        $row = $result->fetch_assoc();
+                        $class = $row['class'];
 
-$sql_query = "SELECT * FROM notice WHERE (role = 'student' AND class='$class') OR (role = 'all' OR role='') ORDER BY s_no DESC LIMIT 3";
-$result = mysqli_query($conn, $sql_query);
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        echo "<p> <b>" . $row['title'] . "</b> <br>" . $row['body'] . "<br></p>";
-        if ($row['file'] != null) {
-            echo "<a href='../noticeUploads/" . $row['file'] . "'><img src='file.svg' height='30px' width='30px'><p style='color:red;'>View Notice</p></a>";
-        }
-        echo "<small class='text-muted'><b>" . $row['timestamp'] . "</b></small><hr><br>";
-    }
-}
-?>
+                        $sql_query = "SELECT * FROM notice WHERE (role = 'student' AND class='$class') OR (role = 'all' OR role='') ORDER BY s_no DESC LIMIT 3";
+                        $result = mysqli_query($conn, $sql_query);
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<p> <b>" . $row['title'] . "</b> <br>" . $row['body'] . "<br></p>";
+                                if ($row['file'] != null) {
+                                    echo "<a href='../noticeUploads/" . $row['file'] . "'><img src='file.svg' height='30px' width='30px'><p style='color:red;'>View Notice</p></a>";
+                                    $log->info('Student viewed notice', ['uid' => $id, 'notice_id' => $row['s_no']]);
+                                }
+                                echo "<small class='text-muted'><b>" . $row['timestamp'] . "</b></small><hr><br>";
+                            }
+                        }
+                        ?>
 
 
 
@@ -331,7 +339,7 @@ if ($result->num_rows > 0) {
                         $formattedDate = date('d M, Y', strtotime($timestamp));
 
                         $senderId = $row2['sender_id'];
-                        $tableName = ($senderId >= 1000) ? 'admins' : 'teachers'; 
+                        $tableName = ($senderId >= 1000) ? 'admins' : 'teachers';
                         $sql = "SELECT `fname`, `lname` FROM `$tableName` WHERE id = '$senderId' LIMIT 1";
 
                         $result = mysqli_query($conn, $sql);
@@ -354,7 +362,7 @@ if ($result->num_rows > 0) {
                             </div>
                         </div>";
                     }
-                }else{
+                } else {
                     echo "<div class='teacher'>
                     <div class='info' style='width: 100%;'>
                         <p class='text-muted para-text'>

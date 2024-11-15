@@ -78,6 +78,12 @@
                             width: 100%;
                             table-layout: fixed;
                         }
+
+                        /* Ensure long words in context column wrap */
+                        td:nth-child(4) {
+                            word-wrap: break-word;
+                            max-width: 200px;
+                        }
                     </style>
 
                     <script src="../assets/js/dashboard.js"></script>

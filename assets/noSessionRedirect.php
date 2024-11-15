@@ -11,7 +11,6 @@ if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY']) >
   session_destroy();   // Destroy session data in storage
 
   // show alert message and redirect to login page
-
   echo "<script>alert('Session Expired! Please login again.')</script>";
 
   echo "<script>window.location.href = '../login.php';</script>";
