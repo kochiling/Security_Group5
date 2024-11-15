@@ -25,7 +25,7 @@ class MySQLHandler extends AbstractProcessingHandler
             'INSERT INTO logs (level, message, timestamp, context) VALUES (?, ?, ?, ?)'
         );
 
-        $level = $record['level_name'];                          // extract log level
+        $level = $record['level_name'];                     // extract log level
         $message = $record['message'];                      // extract log message
         $time = $record['datetime']->format('Y-m-d H:i:s'); // extract log time
         $context = json_encode($record['context']);         // extract log context

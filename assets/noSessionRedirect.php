@@ -20,9 +20,17 @@ if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY']) >
 
 // Notify user that session will expire in 10 seconds due to inactivity
 echo "<script>
-  setTimeout(function() {
-    alert('Due to inactivity, your session will expire in 10 seconds.');
-  }, ($timeout_duration - 10) * 1000);
+  var timeoutDuration = $timeout_duration * 1000;
+  var warningDuration = 10 * 1000;
+  var checkInterval = 5 * 60 * 1000; // Check every 5 minutes
+
+  function checkSession() {
+    setTimeout(function() {
+      alert('Due to inactivity, your session will expire in 10 seconds.');
+    }, timeoutDuration - warningDuration);
+  }
+
+  setInterval(checkSession, checkInterval);
 </script>";
 
 // Update last activity time stamp
@@ -34,5 +42,3 @@ if (!isset($_SESSION['uid'])) {
   header("Location: ../login.php");
   exit();
 }
-
-?>
