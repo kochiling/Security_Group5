@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Use prepared statements for inserting user details
         $password = str_replace("-", "", $dob); 
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-        $addUserDetailQuery = "INSERT INTO `users` (`s_no`, `id`, `email`, `password_hash`, `role`, `theme`) VALUES (NULL, ?, ?, ?, 'teacher', 'light')";
+        $addUserDetailQuery = "INSERT INTO `users` (`s_no`, `id`, `email`, `password_hash`, `role`, `theme`,`data_policy`) VALUES (NULL, ?, ?, ?, 'teacher', 'light','0')";
         $stmt = mysqli_prepare($conn, $addUserDetailQuery);
         mysqli_stmt_bind_param($stmt, "sss", $uniqueId, $email, $passwordHash);
         mysqli_stmt_execute($stmt);
