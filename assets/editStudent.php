@@ -6,32 +6,32 @@ include("../assets/monolog_config.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $id = $_POST["id"];
-    $fname = $_POST["fname"];
-    $lname = $_POST["lname"];
-    $father = $_POST["father"];
+    $id = htmlspecialchars(mysqli_real_escape_string($conn, $_POST["id"]));
+    $fname = htmlspecialchars(mysqli_real_escape_string($conn, $_POST["fname"]));
+    $lname = htmlspecialchars(mysqli_real_escape_string($conn, $_POST["lname"]));
+    $father = htmlspecialchars(mysqli_real_escape_string($conn, $_POST["father"]));
 
-    $class = $_POST["class"];
-    $section = $_POST["section"];
+    $class = htmlspecialchars(mysqli_real_escape_string($conn, $_POST["class"]));
+    $section = htmlspecialchars(mysqli_real_escape_string($conn, $_POST["section"]));
 
-    $gender = $_POST["gender"];
+    $gender = htmlspecialchars(mysqli_real_escape_string($conn, $_POST["gender"]));
 
-    $dobString = $_POST["dob"];
+    $dobString = htmlspecialchars(mysqli_real_escape_string($conn, $_POST["dob"]));
     $timestamp = strtotime($dobString);
     $dob = date('d-m-Y', $timestamp) . "";
 
-    $phone = $_POST["phone"];
-    $email = $_POST["email"];
-    $address = $_POST["address"];
-    $city = $_POST["city"];
-    $zip = $_POST["zip"];
-    $state = $_POST["state"];
-    $guardian = $_POST["guardian"];
-    $gphone = $_POST["gphone"];
-    $gaddress = $_POST["gaddress"];
-    $gcity = $_POST["gcity"];
-    $gzip = $_POST["gzip"];
-    $relation = $_POST["relation"];
+    $phone = htmlspecialchars(mysqli_real_escape_string($conn, $_POST["phone"]));
+    $email = htmlspecialchars(mysqli_real_escape_string($conn, $_POST["email"]));
+    $address = htmlspecialchars(mysqli_real_escape_string($conn, $_POST["address"]));
+    $city = htmlspecialchars(mysqli_real_escape_string($conn, $_POST["city"]));
+    $zip = htmlspecialchars(mysqli_real_escape_string($conn, $_POST["zip"]));
+    $state = htmlspecialchars(mysqli_real_escape_string($conn, $_POST["state"]));
+    $guardian = htmlspecialchars(mysqli_real_escape_string($conn, $_POST["guardian"]));
+    $gphone = htmlspecialchars(mysqli_real_escape_string($conn, $_POST["gphone"]));
+    $gaddress = htmlspecialchars(mysqli_real_escape_string($conn, $_POST["gaddress"]));
+    $gcity = htmlspecialchars(mysqli_real_escape_string($conn, $_POST["gcity"]));
+    $gzip = htmlspecialchars(mysqli_real_escape_string($conn, $_POST["gzip"]));
+    $relation = htmlspecialchars(mysqli_real_escape_string($conn, $_POST["relation"]));
 
 
     $sql = "SELECT * FROM students WHERE id='$id'";
