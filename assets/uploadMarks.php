@@ -11,14 +11,22 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
     foreach ($decodedData as $studentId => $value) {
 
-        $examId = $value['examId'];
-        $marks = $value['marks'];
+        $examId = mysqli_real_escape_string($conn, $value['examId']);
+        if (isset($value['marks']) && is_array($value['marks'])) {
+            $marks = filter_var_array($value['marks'], FILTER_SANITIZE_NUMBER_INT);
+        } else {
+            $response["status"] = "error";
+            $response["message"] = "Invalid marks data!";
+            break;
+        }
 
         // I WANT TO DO MY LOGIC HERE
 
         foreach ($marks as $subject => $mark) {
 
-            $response = $studentId . " : " . $examId  . " : " . $subject . " : " . $mark;
+            $subject = mysqli_real_escape_string($conn, $subject);
+            $mark = mysqli_real_escape_string($conn, $mark);
+            $studentId = mysqli_real_escape_string($conn, $studentId);
 
             $query = "INSERT INTO `marks` (`s_no`, `exam_id`, `subject`,  `student_id`, `marks`) VALUES (NULL, ?, ?, ?, ?);";
 
@@ -32,9 +40,12 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 $response = "Something went wrong while saving!!";
                 break;
             }
+
+              mysqli_stmt_close($stmt);
         }
     }
 } else {
     $response = "Something went wrong!";
 }
-echo $response;
+mysqli_close($conn);
+echo json_encode($response);
