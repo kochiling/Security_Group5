@@ -9,32 +9,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $json_data = file_get_contents("php://input");
     $dataObject = json_decode($json_data, true);
     
-    $id = $dataObject["id"];
-    $fname = $dataObject["fname"];
-    $lname = $dataObject["lname"];
-    $_class = $dataObject["class"];
-    $_section = $dataObject["section"];
+    $id = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["id"]));
+    $fname = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["fname"]));
+    $lname = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["lname"]));
+    $_class = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["class"]));
+    $_section = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["section"]));
 
-    $subject = $dataObject["subject"];
-    $gender = $dataObject["gender"];
+    $subject = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["subject"]));
+    $gender = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["gender"]));
 
-    $dobString = $dataObject["dob"];
+    $dobString = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["dob"]));
     $timestamp = strtotime($dobString);
     $dob = date('d-m-Y', $timestamp);
 
-    $phone = $dataObject["phone"];
-    $email = $dataObject["email"];
-    $address = $dataObject["address"];
-    $city = $dataObject["city"];
-    $zip = $dataObject["zip"];
-    $state = $dataObject["state"];
-    $guardian = $dataObject["guardian"];
-    $gphone = $dataObject["gphone"];
-    $gaddress = $dataObject["gaddress"];
-    $gcity = $dataObject["gcity"];
-    $gzip = $dataObject["gzip"];
-    $relation = $dataObject["relation"];
-
+    $phone = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["phone"]));
+    $email = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["email"]));
+    $address = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["address"]));
+    $city = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["city"]));
+    $zip = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["zip"]));
+    $state = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["state"]));
+    $guardian = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["guardian"]));
+    $gphone = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["gphone"]));
+    $gaddress = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["gaddress"]));
+    $gcity = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["gcity"]));
+    $gzip = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["gzip"]));
+    $relation = htmlspecialchars(mysqli_real_escape_string($conn, $dataObject["relation"]));
+   
     $sql = "SELECT * FROM teachers WHERE id=?";
     $stmt = mysqli_prepare($conn, $sql);
     mysqli_stmt_bind_param($stmt, "s", $id);
