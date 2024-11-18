@@ -1,6 +1,7 @@
 <?php
 include("../assets/noSessionRedirect.php"); 
 include('./fetch-data/verfyRoleRedirect.php');
+include("../../assets/config.php");
 
 error_reporting(0);
 ?>
@@ -18,7 +19,6 @@ error_reporting(0);
     <title>ERP</title>
     <style type="text/css">
          .card{
-                
                 position: absolute;
                 margin-top: 5%;
          }
@@ -28,7 +28,6 @@ error_reporting(0);
          	display: flex;
          	justify-content: center;
          	flex-direction: row;
-
          }
          .card{
          	width: 40%;
@@ -43,55 +42,65 @@ error_reporting(0);
 <body>
 	<div class="header">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="index.php">SCHOOL MANAGEMENT</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="index.php">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="notices.php">Notice</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Fee Pay
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="make-payment.php">Make Payment</a></li>
-            <li><a class="dropdown-item" href="see-payment.php">See Payment</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="change-password.php">Change-Password</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="logout.php">Logout</a>
-        </li>
-      </ul>
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
-    </div>
-  </div>
-</nav>
+          <div class="container-fluid">
+            <a class="navbar-brand" href="index.php">SCHOOL MANAGEMENT</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="index.php">Home</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="notices.php">Notice</a>
+                </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Fee Pay
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="make-payment.php">Make Payment</a></li>
+                    <li><a class="dropdown-item" href="see-payment.php">See Payment</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                  </ul>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="change-password.php">Change-Password</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="logout.php">Logout</a>
+                </li>
+              </ul>
+              <form class="d-flex">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+              </form>
+            </div>
+          </div>
+        </nav>
     </div>
 	<div class="detail" id="details">
     
 <?php
-  
-  $data = "";
+  // Decryption key and method
+  $key = ENCRYPTION_KEY; // Your encryption key
+  $method = "AES-256-CBC"; // Decryption method
+  $iv = substr(hash('sha256', $key), 0, 16); // Ensure the same IV is used
 
-  $sql="SELECT * FROM teachers where id = '{$_GET['id']}'";
+  $data = "";
+  
+  // Fetch teacher data by ID
+  $sql="SELECT * FROM teachers WHERE id = '{$_GET['id']}'";
   $result=mysqli_query($conn,$sql);
   if(mysqli_num_rows($result)>0){
     while($row=mysqli_fetch_assoc($result)){
+        // Decrypt sensitive data
+        $phone_decrypted = openssl_decrypt($row['phone'], $method, $key, 0, $iv);
+        $address_decrypted = openssl_decrypt($row['address'], $method, $key, 0, $iv);
+
+        // Construct the teacher details card
         $data .= "<div class='card'>
                     <img src='../teacherUploads/".$row['image']."' class='card-img-top' alt='profile image of teacher'/>
                     <div class='card-body'>
@@ -100,12 +109,12 @@ error_reporting(0);
                     </div>
                     <ul class='list-group list-group-light list-group-small'>
                         <li class='list-group-item px-4'>Name: ".$row['fname']." ".$row['lname']."</li>
-                        <li class='list-group-item px-4'>Email : ".$row['email']."</li>
-                        <li class='list-group-item px-4'>Phone: ".$row['phone']."</li>
+                        <li class='list-group-item px-4'>Email: ".$row['email']."</li>
+                        <li class='list-group-item px-4'>Phone: ".$phone_decrypted."</li>
                         <li class='list-group-item px-4'>D-O-B: ".$row['dob']."</li>
-                        <li class='list-group-item px-4'>Address: ".$row['address']."</li>
-                        <li class='list-group-item px-4'>city: ".$row['city']."</li>
-                        <li class='list-group-item px-4'>state: ".$row['gender']."</li>
+                        <li class='list-group-item px-4'>Address: ".$address_decrypted."</li>
+                        <li class='list-group-item px-4'>City: ".$row['city']."</li>
+                        <li class='list-group-item px-4'>State: ".$row['state']."</li>
                         <li class='list-group-item px-4'>Father Name: ".$row['father']."</li>
                     </ul>
                     <div class='card-body'>
