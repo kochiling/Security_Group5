@@ -1,8 +1,6 @@
 <?php
-
+include("config.php");
 session_start();
-include("../assets/config.php");
-include("../assets/monolog_config.php");
 $response = array();
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -41,12 +39,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
                 $stmt2 = mysqli_prepare($conn, $query2);
 
-                $newPassword_hash = password_hash($newPass, PASSWORD_DEFAULT);
+                $newPassword_hash = password_hash($newPass, PASSWORD_ARGON2ID);
                 mysqli_stmt_bind_param($stmt2, "ss", $newPassword_hash, $uid);
                 if (mysqli_stmt_execute($stmt2)) {
                     $response['status'] = "success";
                     $response["message"] = "Password changed successfully.";
-                    $log->info('User password changed', ['uid' => $uid]);
 
                 } else {
                     $response['status'] = "Error";

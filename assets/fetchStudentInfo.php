@@ -6,6 +6,11 @@ if (isset($_POST['id'])) {
     $id = $_POST['id'];
     $data = array('id' => $id);
     
+    // Decryption settings
+    $key = ENCRYPTION_KEY;
+    $method = "AES-256-CBC";
+    $iv = substr(hash('sha256', $key), 0, 16);
+
     $sql = "SELECT *
     FROM students
     INNER JOIN student_guardian ON students.id = student_guardian.id  
@@ -26,21 +31,22 @@ if (isset($_POST['id'])) {
             $data["section"] = $row["section"];
             $data["gender"] = $row["gender"];
             $data["image"] = $row["image"];
-
             $dobString = $row["dob"];
             $timestamp = strtotime($dobString);
             $data["dob"] = date('Y-m-d', $timestamp);
 
-            $data["phone"] = $row["phone"];
+            // Decrypt sensitive data
+            $data["phone"] = openssl_decrypt($row["phone"], $method, $key, 0, $iv);
             $data["email"] = $row["email"];
-            $data["address"] = $row["address"];
+            $data["address"] = openssl_decrypt($row["address"], $method, $key, 0, $iv);
             $data["city"] = $row["city"];
             $data["zip"] = $row["zip"];
             $data["state"] = $row["state"];
 
+            // Decrypting guardian data
             $data["guardian"] = $row["gname"];
-            $data["gphone"] = $row["gphone"];
-            $data["gaddress"] = $row["gaddress"];
+            $data["gphone"] = openssl_decrypt($row["gphone"], $method, $key, 0, $iv);
+            $data["gaddress"] = openssl_decrypt($row["gaddress"], $method, $key, 0, $iv);
             $data["gcity"] = $row["gcity"];
             $data["gzip"] = $row["gzip"];
             $data["relation"] = $row["relation"];
@@ -54,3 +60,4 @@ if (isset($_POST['id'])) {
     mysqli_stmt_close($stmt);
 }
 ?>
+
