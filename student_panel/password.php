@@ -1,17 +1,13 @@
-<?php
-include("../assets/noSessionRedirect.php"); ?>
+
+
+<?php include("../assets/noSessionRedirect.php"); ?>
 <?php include("./verifyRoleRedirect.php"); ?>
-<?php
+<?php 
 
-session_start();
-include('../assets/config.php'); // Include the database connection file
-include('../assets/monolog_config.php'); // Include the Monolog configuration file
-
-$id = $_SESSION['uid'];
+  $id = $_SESSION['uid'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -22,35 +18,27 @@ $id = $_SESSION['uid'];
     <link rel="stylesheet" href="style.css">
 
     <style>
-        header {
-            position: relative;
-        }
-
-        .change-password-container {
+        header{position: relative;}
+        .change-password-container{
             display: flex;
             align-items: center;
             justify-content: center;
             width: 100%;
             height: 90vh;
         }
-
-        .change-password-container form {
+        .change-password-container form{
             display: flex;
             flex-direction: column;
             justify-content: center;
             border-radius: var(--border-radius-2);
-            padding: 3.5rem;
+            padding : 3.5rem;
             background-color: var(--color-white);
             box-shadow: var(--box-shadow);
             width: 95%;
             max-width: 32rem;
         }
-
-        .change-password-container form:hover {
-            box-shadow: none;
-        }
-
-        .change-password-container form input[type=password] {
+        .change-password-container form:hover{box-shadow: none;}
+        .change-password-container form input[type=password]{
             border: none;
             outline: none;
             border: 1px solid var(--color-light);
@@ -59,20 +47,14 @@ $id = $_SESSION['uid'];
             width: 100%;
             padding: 0 .5rem;
         }
-
-        .change-password-container form .box {
+        .change-password-container form .box{
             padding: .5rem 0;
         }
-
-        .change-password-container form .box p {
+        .change-password-container form .box p{
             line-height: 2;
         }
-
-        .change-password-container form h2+p {
-            margin: .4rem 0 1.2rem 0;
-        }
-
-        .btn {
+        .change-password-container form h2+p{margin: .4rem 0 1.2rem 0;} 
+        .btn{
             background: none;
             border: none;
             border: 2px solid var(--color-primary) !important;
@@ -84,15 +66,13 @@ $id = $_SESSION['uid'];
             margin: 1rem 1.5rem 1rem 0;
             margin-top: 1.5rem;
         }
-
-        .btn:hover {
+        .btn:hover{
             color: var(--color-primary);
             background-color: transparent;
         }
     </style>
 
 </head>
-
 <body>
     <header>
         <div class="logo">
@@ -107,7 +87,7 @@ $id = $_SESSION['uid'];
             <a href="timetable.php" onclick="timeTableAll()">
                 <span class="material-icons-sharp">today</span>
                 <h3>Time Table</h3>
-            </a>
+            </a> 
             <a href="exam.php">
                 <span class="material-icons-sharp">grid_view</span>
                 <h3>Examination</h3>
@@ -115,10 +95,6 @@ $id = $_SESSION['uid'];
             <a href="workspace.php">
                 <span class="material-icons-sharp">description</span>
                 <h3>Workspace</h3>
-            </a>
-            <a href="security_edu.php">
-                <span class="material-icons-sharp">security</span>
-                <h3>Security Education</h3>
             </a>
             <a href="password.php" class="active">
                 <span class="material-icons-sharp">password</span>
@@ -159,56 +135,66 @@ $id = $_SESSION['uid'];
                 <a href="index.php" class="text-muted">Cancel</a>
             </div>
             <!--<a href="#"><p>Forget password?</p></a>-->
-        </form>
+        </form> 
         <?php
-        // Sanitizes Input Field   
-        $password = htmlspecialchars($_POST['current'], ENT_QUOTES, 'UTF-8');
-        $newpassword = htmlspecialchars($_POST['new'], ENT_QUOTES, 'UTF-8');
-        $confirmnewpassword = htmlspecialchars($_POST['repeat'], ENT_QUOTES, 'UTF-8');
-        $result = mysqli_query($conn, "SELECT password_hash FROM users WHERE id='$id'");
-        if ($result->num_rows > 0) {
-            $row = $result->fetch_assoc();
+            // Retrieve the current, new, and confirm passwords from the form submission
+            $password = $_POST['current'];
+            $newpassword = $_POST['new'];
+            $confirmnewpassword = $_POST['repeat'];
 
-            $pass = $row['password_hash'];
-            if (isset($_POST['submit'])) {
-                if (password_verify($password, $pass)) {
-                    if ($newpassword == $confirmnewpassword) {
-                        $newpasswordhash = password_hash($newpassword, PASSWORD_DEFAULT);
-                        if (mysqli_query($conn, "UPDATE users SET password_hash='$newpasswordhash' where id='$id'")) {
-                            echo "<script>alert('Password Updated')</script>";
-                            $log->info('Password for user updated', ['userId' => $id]);
+            // Fetch the existing password hash from the database
+            $result = mysqli_query($conn, "SELECT password_hash FROM users WHERE id='$id'");
+
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                $pass = $row['password_hash'];
+
+                // Proceed if the form is submitted
+                if (isset($_POST['submit'])) {
+                    // Verify the current password
+                    if (password_verify($password, $pass)) {
+                        // Check if the new password and confirmation match
+                        if ($newpassword == $confirmnewpassword) {
+                            // Hash the new password using Argon2
+                            $newpasswordhash = password_hash($newpassword, PASSWORD_ARGON2ID);
+                            
+                            // Update the password in the database
+                            if (mysqli_query($conn, "UPDATE users SET password_hash='$newpasswordhash' WHERE id='$id'")) {
+                                echo "<script>alert('Password Updated');</script>";
+                            } else {
+                                echo "<script>alert('Unable to update password');</script>";
+                            }
                         } else {
-                            echo "<script>alert('unable to update')</script>";
+                            echo "<script>alert('New password and confirm password do not match');</script>";
                         }
                     } else {
-                        echo "<script>alert('new password and confirm passsword are not same')</script>";
+                        echo "<script>alert('Wrong current password');</script>";
                     }
-                } else {
-                    echo "<script>alert('wrong current password...');</script>";
                 }
             }
-        }
-        //  if(!$result)
-        //  {
-        //  echo "<script>alert('The username you entered does not exist')</script>";
-        //  }
-        //  else if($password!= $result->num_row)
-        //  {
-        //  echo "<script>alert('You entered an incorrect password')</script>";
-        //  }
 
-        //  if($newpassword=$confirmnewpassword)
-        //  $sql=mysqli_query("UPDATE users SET password_hash='$newpassword' where id='$id'");
-        //  if($sql)
-        //  {
-        //  echo "<script>alert('Congratulations You have successfully changed your password')</script>";
-        //  }
-        // else
-        //  {
-        // echo "<script>alert('Passwords do not match')</script>";
-        // }
-        ?>
-    </div>
+
+       //  if(!$result)
+       //  {
+       //  echo "<script>alert('The username you entered does not exist')</script>";
+       //  }
+       //  else if($password!= $result->num_row)
+       //  {
+       //  echo "<script>alert('You entered an incorrect password')</script>";
+       //  }
+
+       //  if($newpassword=$confirmnewpassword)
+       //  $sql=mysqli_query("UPDATE users SET password_hash='$newpassword' where id='$id'");
+       //  if($sql)
+       //  {
+       //  echo "<script>alert('Congratulations You have successfully changed your password')</script>";
+       //  }
+       // else
+       //  {
+       // echo "<script>alert('Passwords do not match')</script>";
+       // }
+         ?>   
+         </div>
 
 </body>
 
