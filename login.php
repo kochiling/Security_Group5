@@ -43,6 +43,8 @@ if (isset($_SESSION['uid'])) {
       $log->close();
       header('Location: student_panel/index.php');
       exit();
+    } else if ($row['role'] == "admin_block") {
+      $blockedMessage = "This account has been blocked by the owner. Please contact support for assistance.";
     } else {
       $log->error('User not found');
     }
@@ -51,6 +53,9 @@ if (isset($_SESSION['uid'])) {
   }
 }
 
+if (empty($_SESSION['csrf_token'])) {
+  $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
 
 ?>
 <!DOCTYPE html>
@@ -93,7 +98,8 @@ if (isset($_SESSION['uid'])) {
             </div>
           </div>
 
-          <form action="index.php" id="login-form" method="post">
+          <form action="login-backend.php" id="login-form" method="post">
+            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
             <div class="input-boxes">
               <div class="input-box">
                 <i class="fas fa-envelope"></i>
