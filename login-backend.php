@@ -4,77 +4,85 @@ session_start();
 $response = array();
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-     http_response_code(404);
-     die();
-}else{
-    
-    
-if (isset($_POST['email']) && isset($_POST['password'])) {
-    include("assets/config.php");
+    http_response_code(404);
+    die();
+} else {
+    // Verify CSRF Token
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        $response['status'] = 'error';
+        $response['message'] = 'Invalid CSRF token.';
+        echo json_encode($response);
+        die(); // Stop execution if CSRF token is invalid
+    }
 
-    if ($conn) {
-        $email = mysqli_real_escape_string($conn, $_POST['email']);
-        $password = mysqli_real_escape_string($conn, $_POST['password']);
+    // Check email and password fields
+    if (isset($_POST['email']) && isset($_POST['password'])) {
+        include("assets/config.php");
 
-        $sql = "SELECT id, role, password_hash FROM users WHERE email=?";
-        $stmt = mysqli_prepare($conn, $sql);
+        if ($conn) {
+            $email = mysqli_real_escape_string($conn, $_POST['email']);
+            $password = mysqli_real_escape_string($conn, $_POST['password']);
 
-        if ($stmt) {
-            mysqli_stmt_bind_param($stmt, "s", $email);
-            mysqli_stmt_execute($stmt);
+            $sql = "SELECT id, role, password_hash, data_policy FROM users WHERE email=?";
+            $stmt = mysqli_prepare($conn, $sql);
 
-            $result = mysqli_stmt_get_result($stmt);
+            if ($stmt) {
+                mysqli_stmt_bind_param($stmt, "s", $email);
+                mysqli_stmt_execute($stmt);
 
-            if ($result) {
-                $row = mysqli_fetch_assoc($result);
+                $result = mysqli_stmt_get_result($stmt);
 
-                if ($row) {
-                    // Check if the password matches (CL added)
+                if ($result) {
+                    $row = mysqli_fetch_assoc($result);
+
+                    if ($row) {
                         if (password_verify($password, $row['password_hash'])) {
-                            // Check the data policy
-                            if ($row['data_policy'] == 0) {
+                            if ($row['role'] == 'admin_block') {
+                                // Handle blocked accounts
+                                $response['status'] = 'error';
+                                $response['message'] = "This account has been blocked by the owner.";
+                            } elseif ($row['data_policy'] == 0) {
                                 // User has not accepted the data policy
                                 $_SESSION['uid'] = $row['id'];
                                 $response['status'] = 'redirect';
                                 $response['page'] = 'update_policy.php';
                             } else {
-                                // User has accepted the data policy, proceed with login
+                                // Successful login
                                 $_SESSION['uid'] = $row['id'];
                                 $response['status'] = 'success';
                                 $response['role'] = $row['role'];
                             }
-                        }else {
+                        } else {
+                            $response['status'] = 'error';
+                            $response['message'] = 'Invalid email or password!';
+                        }
+                    } else {
                         $response['status'] = 'error';
                         $response['message'] = 'Invalid email or password!';
                     }
+
+                    mysqli_stmt_close($stmt);
                 } else {
                     $response['status'] = 'error';
-                    $response['message'] = 'Invalid email or password!';
+                    $response['message'] = 'Error fetching result';
                 }
-
-                mysqli_stmt_close($stmt);
             } else {
                 $response['status'] = 'error';
-                $response['message'] = 'Error fetching result';
+                $response['message'] = 'Error preparing statement';
             }
         } else {
             $response['status'] = 'error';
-            $response['message'] = 'Error preparing statement';
+            $response['message'] = 'Database connection error';
         }
     } else {
         $response['status'] = 'error';
-        $response['message'] = 'Database connection error';
+        $response['message'] = 'Both fields are required';
     }
 
-    
-} else {
-    $response['status'] = 'error';
-    $response['message'] = 'Both fields are required';
-}
+    // Clear CSRF token after use
+    unset($_SESSION['csrf_token']);
 
-// Return the response
-echo json_encode($response);
-    
+    // Return the response
+    echo json_encode($response);
 }
-
 ?>
