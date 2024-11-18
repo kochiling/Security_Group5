@@ -588,27 +588,38 @@ INSERT INTO `time_table` (`s_no`, `class`, `section`, `start_time`, `end_time`, 
 -- Table structure for table `users`
 --
 
+-- Add the data policy column
+
 CREATE TABLE `users` (
   `s_no` int(15) NOT NULL,
   `id` varchar(40) NOT NULL,
   `email` varchar(256) NOT NULL,
   `password_hash` varchar(700) NOT NULL,
   `role` varchar(20) NOT NULL,
-  `theme` varchar(20) NOT NULL DEFAULT 'light'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `theme` varchar(20) NOT NULL DEFAULT 'light',
+  `data_policy` int(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`s_no`, `id`, `email`, `password_hash`, `role`, `theme`) VALUES
-(1, 'A9876543210', 'admin@gmail.com', '$2y$10$2MrhbQa30mll8mKG6LPyjuI7CQPC4abCvqrSvczxXVRu4RVueRfoe', 'admin', 'light'),
-(2, 'T1718791191', 'teacher@gmail.com', '$2y$10$2MrhbQa30mll8mKG6LPyjuI7CQPC4abCvqrSvczxXVRu4RVueRfoe', 'teacher', 'light'),
-(3, 'S1718791292', 'student@gmail.com', '$2y$10$2MrhbQa30mll8mKG6LPyjuI7CQPC4abCvqrSvczxXVRu4RVueRfoe', 'student', 'light'),
-(4, 'O7898987845', 'owner@gmail.com', '$2y$10$2MrhbQa30mll8mKG6LPyjuI7CQPC4abCvqrSvczxXVRu4RVueRfoe', 'owner', 'light');
+INSERT INTO `users` (`s_no`, `id`, `email`, `password_hash`, `role`, `theme`,`data_policy` ) VALUES
+(1, 'A9876543210', 'admin@gmail.com', '$2y$10$2MrhbQa30mll8mKG6LPyjuI7CQPC4abCvqrSvczxXVRu4RVueRfoe', 'admin', 'light', 1),
+(2, 'T1718791191', 'teacher@gmail.com', '$2y$10$2MrhbQa30mll8mKG6LPyjuI7CQPC4abCvqrSvczxXVRu4RVueRfoe', 'teacher', 'light', 0),
+(3, 'S1718791292', 'student@gmail.com', '$2y$10$2MrhbQa30mll8mKG6LPyjuI7CQPC4abCvqrSvczxXVRu4RVueRfoe', 'student', 'light', 0),
+(4, 'O7898987845', 'owner@gmail.com', '$2y$10$2MrhbQa30mll8mKG6LPyjuI7CQPC4abCvqrSvczxXVRu4RVueRfoe', 'owner', 'light',1 );
 
---
--- Indexes for dumped tables
+
+
+-- Table structure for table `logs`
+CREATE TABLE `logs` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `level` VARCHAR(100) NOT NULL,
+  `message` TEXT NOT NULL,
+  `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `context` TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 --
 
 --
