@@ -88,58 +88,69 @@ error_reporting(0);
   $id = $_GET['id'];
 
   // Fetch student data by ID
-  $sql = "SELECT * FROM students WHERE id = ?";
-  $stmt = mysqli_prepare($conn, $sql);
-  mysqli_stmt_bind_param($stmt, "s", $id);
-  mysqli_stmt_execute($stmt);
-  $result = mysqli_stmt_get_result($stmt);
-  
-  // Decryption key and method
-  $key = ENCRYPTION_KEY; // Your encryption key
-  $method = "AES-256-CBC"; // Decryption method
-  $iv = substr(hash('sha256', $key), 0, 16); // Ensure the same IV is used
-  
-  $data = "";
-  if (mysqli_num_rows($result) > 0) {
-      while ($row = mysqli_fetch_assoc($result)) {
-          // Decrypt sensitive data
-          $phone_decrypted = openssl_decrypt($row['phone'], $method, $key, 0, $iv);
-          $address_decrypted = openssl_decrypt($row['address'], $method, $key, 0, $iv);
-  
-          // Construct the student details card
-          $data .= "<div class='card'>
-                      <img src='../studentUploads/" . $row['image'] . "' class='card-img-top' alt='profile image of student'/>
-                      <div class='card-body'>
-                          <h5 class='card-title'></h5>
-                          <p class='card-text'>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                      </div>
-                      <ul class='list-group list-group-light list-group-small'>
-                          <li class='list-group-item px-4'>Name: " . $row['fname'] . " " . $row['lname'] . "</li>
-                          <li class='list-group-item px-4'>Email: " . $row['email'] . "</li>
-                          <li class='list-group-item px-4'>Father's Name: " . $row['father'] . "</li>
-                          <li class='list-group-item px-4'>Gender: " . $row['gender'] . "</li>
-                          <li class='list-group-item px-4'>Phone: " . $phone_decrypted . "</li>
-                          <li class='list-group-item px-4'>D-O-B: " . $row['dob'] . "</li>
-                          <li class='list-group-item px-4'>Address: " . $address_decrypted . "</li>
-                          <li class='list-group-item px-4'>City: " . $row['city'] . "</li>
-                          <li class='list-group-item px-4'>State: " . $row['state'] . "</li>
-                      </ul>
-                      <div class='card-body'>
-                          <a href='student-attendence.php?id=" . $row['id'] . "' class='card-link'>
-                              <button id='fee' data-id='" . $row['id'] . "' style='height: 35px; width: 100px; background-color: green; color: white; border: none; border-radius: 8px; text-decoration: none;'>Fee Status</button>
-                          </a>
-                          <a href='student-attendence.php?id=" . $row['id'] . "' class='card-link'>
-                              <button id='attendence' data-id='" . $row['id'] . "' style='height: 35px; width: 100px; background-color: #4f4446; color: white; border: none; border-radius: 8px; text-decoration: none;'>Attendance</button>
-                          </a>
-                      </div>
-                  </div>";
-      }
-      echo $data;
-  } else {
-      echo "No student found.";
-  }
-  
-  mysqli_stmt_close($stmt);
+   $sql = "SELECT * FROM students WHERE id = ?";
+   $stmt = mysqli_prepare($conn, $sql);
+   mysqli_stmt_bind_param($stmt, "s", $id);
+   mysqli_stmt_execute($stmt);
+   $result = mysqli_stmt_get_result($stmt);
+ 
+   // Decryption key and method
+   $key = ENCRYPTION_KEY; // Your encryption key
+   $method = "AES-256-CBC"; // Decryption method
+   $iv = substr(hash('sha256', $key), 0, 16); // Ensure the same IV is used
+ 
+   $data = "";
+   if (mysqli_num_rows($result) > 0) {
+     while ($row = mysqli_fetch_assoc($result)) {
+       // Decrypt sensitive data
+       $phone_decrypted = openssl_decrypt($row['phone'], $method, $key, 0, $iv);
+       $address_decrypted = openssl_decrypt($row['address'], $method, $key, 0, $iv);
+ 
+       // Escape output to prevent XSS
+       $fname = htmlspecialchars($row['fname'], ENT_QUOTES, 'UTF-8');
+       $lname = htmlspecialchars($row['lname'], ENT_QUOTES, 'UTF-8');
+       $email = htmlspecialchars($row['email'], ENT_QUOTES, 'UTF-8');
+       $father = htmlspecialchars($row['father'], ENT_QUOTES, 'UTF-8');
+       $gender = htmlspecialchars($row['gender'], ENT_QUOTES, 'UTF-8');
+       $dob = htmlspecialchars($row['dob'], ENT_QUOTES, 'UTF-8');
+       $city = htmlspecialchars($row['city'], ENT_QUOTES, 'UTF-8');
+       $state = htmlspecialchars($row['state'], ENT_QUOTES, 'UTF-8');
+       $image = htmlspecialchars($row['image'], ENT_QUOTES, 'UTF-8');
+ 
+       // Construct the student details card
+       $data .= "<div class='card'>
+             <img src='../studentUploads/" . $image . "' class='card-img-top' alt='profile image of student'/>
+             <div class='card-body'>
+               <h5 class='card-title'></h5>
+               <p class='card-text'>Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+             </div>
+             <ul class='list-group list-group-light list-group-small'>
+               <li class='list-group-item px-4'>Name: " . $fname . " " . $lname . "</li>
+               <li class='list-group-item px-4'>Email: " . $email . "</li>
+               <li class='list-group-item px-4'>Father's Name: " . $father . "</li>
+               <li class='list-group-item px-4'>Gender: " . $gender . "</li>
+               <li class='list-group-item px-4'>Phone: " . htmlspecialchars($phone_decrypted, ENT_QUOTES, 'UTF-8') . "</li>
+               <li class='list-group-item px-4'>D-O-B: " . $dob . "</li>
+               <li class='list-group-item px-4'>Address: " . htmlspecialchars($address_decrypted, ENT_QUOTES, 'UTF-8') . "</li>
+               <li class='list-group-item px-4'>City: " . $city . "</li>
+               <li class='list-group-item px-4'>State: " . $state . "</li>
+             </ul>
+             <div class='card-body'>
+               <a href='student-attendence.php?id=" . $row['id'] . "' class='card-link'>
+                 <button id='fee' data-id='" . $row['id'] . "' style='height: 35px; width: 100px; background-color: green; color: white; border: none; border-radius: 8px; text-decoration: none;'>Fee Status</button>
+               </a>
+               <a href='student-attendence.php?id=" . $row['id'] . "' class='card-link'>
+                 <button id='attendence' data-id='" . $row['id'] . "' style='height: 35px; width: 100px; background-color: #4f4446; color: white; border: none; border-radius: 8px; text-decoration: none;'>Attendance</button>
+               </a>
+             </div>
+           </div>";
+     }
+     echo $data;
+   } else {
+     echo "No student found.";
+   }
+ 
+   mysqli_stmt_close($stmt);
   ?>
 </div>
 <br><br>
