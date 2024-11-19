@@ -88,7 +88,7 @@ body::-webkit-scrollbar {
             box-sizing: border-box;
         }
         
-        h1, h2, h3 {
+        h1, h2 {
             text-align: center;
             margin-bottom: 20px;
         }
@@ -131,6 +131,7 @@ body::-webkit-scrollbar {
             background-color: #f9e1e0;
             color: #c0392b;
         }
+
     </style>
     </style>
 </head>
@@ -191,9 +192,10 @@ body::-webkit-scrollbar {
     <label><input type="radio" name="q1" value="B"> 123456</label>
     <label><input type="radio" name="q1" value="C"> A long passphrase with numbers, symbols, and letters</label>
     <button type="button" onclick="checkAnswers()">Submit</button>
+    <div id="result" class="result-box" style="display: none;"></div>
 </form>
 
-<div id="result" class="result-box" style="display: none;"></div>
+
 
 <form id="quizForm1">
     <h2>2. What is a firewall?</h2>
@@ -201,19 +203,21 @@ body::-webkit-scrollbar {
     <label><input type="radio" name="q2" value="B"> A part of a system or network that blocks unauthorized communications</label>
     <label><input type="radio" name="q2" value="C"> Something hackers use.</label>
     <button type="button" onclick="checkAnswers1()">Submit</button>
+    <div id="result1" class="result-box" style="display: none;"></div>
 </form>
 
-<div id="result1" class="result-box" style="display: none;"></div>
+
 
 <form id="quizForm2">
-    <h3>3. An attack on a computer system that exploits how people will behave and respond in certain situations is called ________ engineering.</h3>
+    <h2>3. An attack on a computer system that exploits how people will behave and respond in certain situations is called ________ engineering.</h2>
     <label><input type="radio" name="q3" value="A"> Software</label>
     <label><input type="radio" name="q3" value="B"> Cyber</label>
     <label><input type="radio" name="q3" value="C"> Social</label>
     <button type="button" onclick="checkAnswers2()">Submit</button>
+    <div id="result2" class="result-box" style="display: none;"></div>
 </form>
 
-<div id="result2" class="result-box" style="display: none;"></div>
+
 
 <script>
     function checkAnswers() {
